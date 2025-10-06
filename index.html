@@ -1,0 +1,2045 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Utility Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #3c99e1 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            color: #e9d5ff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .header-title h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(220, 194, 244, 0.5);
+        }
+
+        .shield-icon {
+            width: 50px;
+            height: 50px;
+            fill: #a855f7;
+            filter: drop-shadow(0 0 10px rgba(5, 50, 128, 0.7));
+        }
+
+        .subtitle {
+            color: #c4b5fd;
+            font-size: 1.1rem;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: #c4b5fd;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(88, 28, 135, 0.3);
+        }
+
+        .tab-btn.active {
+            background: #7c3aed;
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .tab-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content Card */
+        .content-card {
+            background: rgba(30, 27, 75, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 25px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #c4b5fd;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(51, 65, 85, 0.8);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(71, 85, 105, 0.9);
+        }
+
+        /* Result Box */
+        .result-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .result-label {
+            color: #c4b5fd;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .result-text {
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: #a855f7;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            color: #c084fc;
+            transform: scale(1.1);
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #86efac;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .alert-warning {
+            background: rgba(234, 179, 8, 0.2);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            color: #fde047;
+        }
+
+        /* Password Strength Meter */
+        .strength-meter {
+            margin-top: 15px;
+        }
+
+        .strength-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(51, 65, 85, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .strength-weak { background: #ef4444; }
+        .strength-fair { background: #f59e0b; }
+        .strength-good { background: #eab308; }
+        .strength-strong { background: #22c55e; }
+
+        /* Range Slider */
+        .range-container {
+            margin: 20px 0;
+        }
+
+        .range-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #c4b5fd;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: rgba(51, 65, 85, 0.8);
+            outline: none;
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #7c3aed;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(124, 58, 237, 0.5);
+        }
+
+        /* Divider */
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(168, 85, 247, 0.2);
+            margin: 30px 0;
+        }
+
+        /* Sub Section */
+        .sub-section {
+            background: rgba(88, 28, 135, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .sub-section-title {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #c4b5fd;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .content-card {
+                padding: 25px;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+        }
+
+        /* Password visibility toggle */
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #a855f7;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .toggle-password:hover {
+            color: #c084fc;
+        }
+
+        /* Suggestions list */
+        .suggestions-list {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .suggestions-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .suggestions-list li {
+            color: #c4b5fd;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .suggestions-list li:before {
+            content: "• ";
+            color: #a855f7;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* History Panel */
+        .history-panel {
+            background: rgba(88, 28, 135, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .history-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: #a855f7;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        /* Export Panel */
+        .export-panel {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(88, 28, 135, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #a855f7;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #c4b5fd;
+            font-size: 0.9rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(124, 58, 237, 0.95);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success { background: rgba(34, 197, 94, 0.95); }
+        .toast.error { background: rgba(239, 68, 68, 0.95); }
+        .toast.warning { background: rgba(234, 179, 8, 0.95); }
+
+        /* Quick Actions Bar */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 15px;
+            background: rgba(88, 28, 135, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: #c4b5fd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(124, 58, 237, 0.4);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        /* Settings Panel */
+        .settings-section {
+            background: rgba(88, 28, 135, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(51, 65, 85, 0.8);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a855f7;
+            pointer-events: none;
+        }
+
+        /* Filter Buttons */
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(88, 28, 135, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: #c4b5fd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            background: rgba(124, 58, 237, 0.4);
+        }
+
+        .filter-btn.active {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        /* Favorites Star */
+        .favorite-btn {
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .favorite-btn:hover {
+            color: #fbbf24;
+        }
+
+        .favorite-btn.active {
+            color: #fbbf24;
+        }
+
+        /* Import/Export Zone */
+        .drop-zone {
+            border: 2px dashed rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(88, 28, 135, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            border-color: rgba(168, 85, 247, 0.6);
+            background: rgba(88, 28, 135, 0.2);
+        }
+
+        .drop-zone.drag-over {
+            border-color: #7c3aed;
+            background: rgba(124, 58, 237, 0.2);
+        }
+
+        /* Keyboard Shortcuts Panel */
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 6px;
+        }
+
+        .shortcut-key {
+            background: rgba(124, 58, 237, 0.3);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #c4b5fd;
+        }
+
+        /* Comparison Mode */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-panel {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-new {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        .badge-pro {
+            background: rgba(124, 58, 237, 0.2);
+            color: #c084fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <svg class="shield-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </svg>
+                <h1>Security Utility Suite</h1>
+            </div>
+            <p class="subtitle">Professional security tools for hash verification, password management, and encryption</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="hash">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="9" x2="20" y2="9"></line>
+                    <line x1="4" y1="15" x2="20" y2="15"></line>
+                    <line x1="10" y1="3" x2="8" y2="21"></line>
+                    <line x1="16" y1="3" x2="14" y2="21"></line>
+                </svg>
+                Hash Checker
+            </button>
+            <button class="tab-btn" data-tab="password">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                </svg>
+                Password Tools
+            </button>
+            <button class="tab-btn" data-tab="encrypt">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Encryption
+            </button>
+            <button class="tab-btn" data-tab="urlcheck">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                URL Checker
+            </button>
+            <button class="tab-btn" data-tab="whois">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                WHOIS Lookup
+            </button>
+            <button class="tab-btn" data-tab="dashboard">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </button>
+            <button class="tab-btn" data-tab="settings">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m5.66-13a7 7 0 0 1-11.31 0m11.31 14a7 7 0 0 0-11.31 0M23 12h-6M7 12H1"></path>
+                </svg>
+                Settings
+            </button>
+            <button class="tab-btn" data-tab="tools">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+                Quick Tools
+            </button>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="content-card">
+            <!-- Hash Checker Tab -->
+            <div id="hash-tab" class="tab-content active">
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="loadSample('hash')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                        </svg>
+                        Load Sample
+                    </button>
+                    <button class="quick-action-btn" onclick="clearForm('hash')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Clear
+                    </button>
+                </div>
+
+                <h2 class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="9" x2="20" y2="9"></line>
+                        <line x1="4" y1="15" x2="20" y2="15"></line>
+                        <line x1="10" y1="3" x2="8" y2="21"></line>
+                        <line x1="16" y1="3" x2="14" y2="21"></line>
+                    </svg>
+                    Hash Generator & Verifier
+                </h2>
+
+                <div class="form-group">
+                    <label for="hashAlgorithm">Algorithm</label>
+                    <select id="hashAlgorithm">
+                        <option value="SHA-256">SHA-256</option>
+                        <option value="SHA-512">SHA-512</option>
+                        <option value="SHA-384">SHA-384</option>
+                        <option value="SHA-1">SHA-1</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hashInput">Input Text</label>
+                    <textarea id="hashInput" placeholder="Enter text to hash..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateHash()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="9" x2="20" y2="9"></line>
+                        <line x1="4" y1="15" x2="20" y2="15"></line>
+                        <line x1="10" y1="3" x2="8" y2="21"></line>
+                        <line x1="16" y1="3" x2="14" y2="21"></line>
+                    </svg>
+                    Generate Hash
+                </button>
+
+                <div id="hashResult" class="result-box hidden">
+                    <div class="result-header">
+                        <span class="result-label">Generated Hash</span>
+                        <button class="copy-btn" onclick="copyToClipboard('hashResultText')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="hashResultText" class="result-text"></p>
+                </div>
+
+                <hr class="divider">
+
+                <h3 class="sub-section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 8px;">
+                        <polyline points="9 11 12 14 22 4"></polyline>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    Verify Hash
+                </h3>
+
+                <div class="form-group">
+                    <label for="verifyHash">Paste Hash to Verify</label>
+                    <input type="text" id="verifyHash" placeholder="Paste hash here...">
+                </div>
+
+                <button class="btn btn-secondary" onclick="verifyHash()">Verify Match</button>
+
+                <div id="verifyResult" class="hidden"></div>
+            </div>
+
+            <!-- Password Tools Tab -->
+            <div id="password-tab" class="tab-content">
+                <h2 class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                    </svg>
+                    Password Tools
+                </h2>
+
+                <!-- Password Strength Checker -->
+                <div class="sub-section">
+                    <h3 class="sub-section-title">Password Strength Checker</h3>
+                    
+                    <div class="form-group">
+                        <label for="passwordInput">Enter Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="passwordInput" placeholder="Enter password to check...">
+                            <button class="toggle-password" onclick="togglePasswordVisibility('passwordInput')">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="checkPasswordStrength()">Check Strength</button>
+
+                    <div id="strengthResult" class="hidden">
+                        <div class="strength-meter">
+                            <div class="strength-label">
+                                <span>Strength:</span>
+                                <span id="strengthLevel"></span>
+                            </div>
+                            <div class="strength-bar">
+                                <div id="strengthFill" class="strength-fill"></div>
+                            </div>
+                        </div>
+                        <div id="strengthSuggestions" class="suggestions-list hidden">
+                            <p style="color: #c4b5fd; font-weight: 600; margin-bottom: 10px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 5px;">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Suggestions:
+                            </p>
+                            <ul id="suggestionsList"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Generator -->
+                <div class="sub-section">
+                    <h3 class="sub-section-title">Password Generator</h3>
+                    
+                    <div class="range-container">
+                        <div class="range-label">
+                            <span>Length:</span>
+                            <span id="lengthValue">16</span>
+                        </div>
+                        <input type="range" id="passwordLength" min="8" max="32" value="16" oninput="updateLengthValue()">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generatePassword()">Generate Secure Password</button>
+
+                    <div id="generatedPasswordResult" class="result-box hidden">
+                        <div class="result-header">
+                            <span class="result-label">Generated Password</span>
+                            <button class="copy-btn" onclick="copyToClipboard('generatedPasswordText')">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p id="generatedPasswordText" class="result-text" style="font-size: 1.2rem; letter-spacing: 1px;"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encryption Tab -->
+            <div id="encrypt-tab" class="tab-content">
+                <h2 class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Text Encryption
+                </h2>
+
+                <div class="alert alert-warning">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    Demo encryption only. Not suitable for production use.
+                </div>
+
+                <div class="form-group">
+                    <label for="encryptText">Text to Encrypt</label>
+                    <textarea id="encryptText" placeholder="Enter text to encrypt..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="encryptKey">Encryption Key</label>
+                    <input type="password" id="encryptKey" placeholder="Enter encryption key...">
+                </div>
+
+                <button class="btn btn-primary" onclick="encryptText()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Encrypt
+                </button>
+
+                <div id="encryptResult" class="result-box hidden">
+                    <div class="result-header">
+                        <span class="result-label">Encrypted Result</span>
+                        <button class="copy-btn" onclick="copyToClipboard('encryptResultText')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="encryptResultText" class="result-text"></p>
+                </div>
+            </div>
+
+            <!-- URL Checker Tab -->
+            <div id="urlcheck-tab" class="tab-content">
+                <h2 class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                    URL & Malware Checker
+                </h2>
+
+                <div class="alert alert-warning">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    This is a demo checker. For production use, integrate with APIs like VirusTotal, Google Safe Browsing, or URLScan.io
+                </div>
+
+                <div class="form-group">
+                    <label for="urlInput">Enter URL to Check</label>
+                    <input type="text" id="urlInput" placeholder="https://example.com">
+                </div>
+
+                <button class="btn btn-primary" onclick="checkURL()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Check URL Safety
+                </button>
+
+                <div id="urlCheckResult" class="hidden" style="margin-top: 20px;">
+                    <div class="sub-section">
+                        <h3 class="sub-section-title">Analysis Results</h3>
+                        <div id="urlAnalysis" class="result-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WHOIS Lookup Tab -->
+            <div id="whois-tab" class="tab-content">
+                <h2 class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    WHOIS Domain Lookup
+                </h2>
+
+                <div class="alert alert-warning">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    Demo WHOIS lookup. For production use, integrate with WHOIS API services like WHOIS XML API or IPGeolocation.
+                </div>
+
+                <div class="form-group">
+                    <label for="domainInput">Enter Domain Name</label>
+                    <input type="text" id="domainInput" placeholder="example.com">
+                </div>
+
+                <button class="btn btn-primary" onclick="performWHOIS()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    Lookup Domain
+                </button>
+
+                <div id="whoisResult" class="hidden" style="margin-top: 20px;">
+                    <div class="sub-section">
+                        <h3 class="sub-section-title">Domain Information</h3>
+                        <div id="whoisData" class="result-text"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Security Utility Suite • Professional Tools for Digital Security</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // MVP FEATURES - Activity Tracking & History
+        // ============================================
+        
+        // Activity statistics
+        let activityStats = {
+            hashCount: 0,
+            passwordCount: 0,
+            urlCheckCount: 0,
+            whoisCount: 0
+        };
+
+        // Activity history
+        let activityHistory = [];
+
+        // Load stats from storage on page load
+        window.addEventListener('load', () => {
+            loadStatsFromMemory();
+            updateStatsDisplay();
+        });
+
+        // Save activity
+        function saveActivity(type, data) {
+            const activity = {
+                id: Date.now(),
+                type: type,
+                data: data,
+                timestamp: new Date().toISOString(),
+                displayTime: new Date().toLocaleString()
+            };
+            
+            activityHistory.unshift(activity); // Add to beginning
+            
+            // Keep only last 50 activities
+            if (activityHistory.length > 50) {
+                activityHistory = activityHistory.slice(0, 50);
+            }
+            
+            // Update stats
+            switch(type) {
+                case 'hash':
+                    activityStats.hashCount++;
+                    break;
+                case 'password':
+                    activityStats.passwordCount++;
+                    break;
+                case 'urlcheck':
+                    activityStats.urlCheckCount++;
+                    break;
+                case 'whois':
+                    activityStats.whoisCount++;
+                    break;
+            }
+            
+            updateStatsDisplay();
+            updateHistoryDisplay();
+            showToast('Activity saved', 'success');
+        }
+
+        // Update stats display
+        function updateStatsDisplay() {
+            document.getElementById('hashCount').textContent = activityStats.hashCount;
+            document.getElementById('passwordCount').textContent = activityStats.passwordCount;
+            document.getElementById('urlCheckCount').textContent = activityStats.urlCheckCount;
+            document.getElementById('whoisCount').textContent = activityStats.whoisCount;
+        }
+
+        // Update history display
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            
+            if (activityHistory.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #c4b5fd; padding: 20px;">No activity yet. Start using the tools!</p>';
+                return;
+            }
+            
+            historyList.innerHTML = activityHistory.map(activity => {
+                const icon = getActivityIcon(activity.type);
+                const summary = getActivitySummary(activity);
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-content">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                                ${icon}
+                                <strong style="color: #a855f7;">${activity.type.toUpperCase()}</strong>
+                                <span style="color: #94a3b8; font-size: 0.85rem;">${activity.displayTime}</span>
+                            </div>
+                            <div style="color: #e9d5ff; font-size: 0.9rem;">${summary}</div>
+                        </div>
+                        <div class="history-actions">
+                            <button class="icon-btn" onclick="copyActivity(${activity.id})" title="Copy">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <button class="icon-btn" onclick="deleteActivity(${activity.id})" title="Delete">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get activity icon
+        function getActivityIcon(type) {
+            const icons = {
+                hash: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>',
+                password: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
+                urlcheck: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
+                whois: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+            };
+            return icons[type] || '';
+        }
+
+        // Get activity summary
+        function getActivitySummary(activity) {
+            switch(activity.type) {
+                case 'hash':
+                    return `Generated ${activity.data.algorithm} hash for text (${activity.data.length} chars)`;
+                case 'password':
+                    return `Generated ${activity.data.length}-character password`;
+                case 'urlcheck':
+                    return `Checked URL: ${activity.data.url.substring(0, 50)}${activity.data.url.length > 50 ? '...' : ''}`;
+                case 'whois':
+                    return `WHOIS lookup for: ${activity.data.domain}`;
+                default:
+                    return 'Unknown activity';
+            }
+        }
+
+        // Copy activity data
+        function copyActivity(id) {
+            const activity = activityHistory.find(a => a.id === id);
+            if (!activity) return;
+            
+            let textToCopy = '';
+            switch(activity.type) {
+                case 'hash':
+                    textToCopy = activity.data.hash;
+                    break;
+                case 'password':
+                    textToCopy = activity.data.password;
+                    break;
+                case 'urlcheck':
+                    textToCopy = activity.data.url;
+                    break;
+                case 'whois':
+                    textToCopy = activity.data.domain;
+                    break;
+            }
+            
+            navigator.clipboard.writeText(textToCopy);
+            showToast('Copied to clipboard', 'success');
+        }
+
+        // Delete activity
+        function deleteActivity(id) {
+            activityHistory = activityHistory.filter(a => a.id !== id);
+            updateHistoryDisplay();
+            showToast('Activity deleted', 'success');
+        }
+
+        // Clear all history
+        function clearHistory() {
+            if (confirm('Clear all activity history?')) {
+                activityHistory = [];
+                updateHistoryDisplay();
+                showToast('History cleared', 'success');
+            }
+        }
+
+        // Export history
+        function exportHistory() {
+            exportAsJSON();
+        }
+
+        // Export as JSON
+        function exportAsJSON() {
+            const data = {
+                statistics: activityStats,
+                history: activityHistory,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            downloadFile(blob, `security-utility-export-${Date.now()}.json`);
+            showToast('Exported as JSON', 'success');
+        }
+
+        // Export as CSV
+        function exportAsCSV() {
+            let csv = 'Type,Timestamp,Details\n';
+            
+            activityHistory.forEach(activity => {
+                const summary = getActivitySummary(activity).replace(/,/g, ';');
+                csv += `${activity.type},${activity.displayTime},"${summary}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            downloadFile(blob, `security-utility-export-${Date.now()}.csv`);
+            showToast('Exported as CSV', 'success');
+        }
+
+        // Export as TXT
+        function exportAsTXT() {
+            let txt = '=== Security Utility Activity Report ===\n\n';
+            txt += `Export Date: ${new Date().toLocaleString()}\n\n`;
+            txt += '=== Statistics ===\n';
+            txt += `Hashes Generated: ${activityStats.hashCount}\n`;
+            txt += `Passwords Generated: ${activityStats.passwordCount}\n`;
+            txt += `URLs Checked: ${activityStats.urlCheckCount}\n`;
+            txt += `WHOIS Lookups: ${activityStats.whoisCount}\n\n`;
+            txt += '=== Activity History ===\n\n';
+            
+            activityHistory.forEach((activity, index) => {
+                txt += `${index + 1}. [${activity.type.toUpperCase()}] ${activity.displayTime}\n`;
+                txt += `   ${getActivitySummary(activity)}\n\n`;
+            });
+            
+            const blob = new Blob([txt], { type: 'text/plain' });
+            downloadFile(blob, `security-utility-export-${Date.now()}.txt`);
+            showToast('Exported as TXT', 'success');
+        }
+
+        // Download file helper
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? 
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' :
+                type === 'error' ?
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>' :
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+            
+            toast.innerHTML = `${icon}<span>${message}</span>`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Load sample data
+        function loadSample(type) {
+            switch(type) {
+                case 'hash':
+                    document.getElementById('hashInput').value = 'Hello World! This is a sample text for hashing.';
+                    showToast('Sample text loaded', 'success');
+                    break;
+            }
+        }
+
+        // Clear form
+        function clearForm(type) {
+            switch(type) {
+                case 'hash':
+                    document.getElementById('hashInput').value = '';
+                    document.getElementById('verifyHash').value = '';
+                    document.getElementById('hashResult').classList.add('hidden');
+                    document.getElementById('verifyResult').classList.add('hidden');
+                    showToast('Form cleared', 'success');
+                    break;
+            }
+        }
+
+        // Load stats from memory (simulated persistence)
+        function loadStatsFromMemory() {
+            // In a real app, you'd load from localStorage here
+            // For now, stats reset on page reload
+        }
+
+        // ============================================
+        // ORIGINAL FUNCTIONS (UPDATED WITH TRACKING)
+        // ============================================
+        
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(tabName + '-tab').classList.add('active');
+            });
+        });
+
+        // Hash Generation
+        async function generateHash() {
+            const input = document.getElementById('hashInput').value;
+            const algorithm = document.getElementById('hashAlgorithm').value;
+            
+            if (!input) {
+                alert('Please enter text to hash');
+                return;
+            }
+
+            const encoder = new TextEncoder();
+            const data = encoder.encode(input);
+            let hashBuffer;
+
+            try {
+                switch(algorithm) {
+                    case 'SHA-1':
+                        hashBuffer = await crypto.subtle.digest('SHA-1', data);
+                        break;
+                    case 'SHA-256':
+                        hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                        break;
+                    case 'SHA-384':
+                        hashBuffer = await crypto.subtle.digest('SHA-384', data);
+                        break;
+                    case 'SHA-512':
+                        hashBuffer = await crypto.subtle.digest('SHA-512', data);
+                        break;
+                }
+
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                
+                document.getElementById('hashResultText').textContent = hashHex;
+                document.getElementById('hashResult').classList.remove('hidden');
+                document.getElementById('verifyResult').classList.add('hidden');
+                
+                // Save activity
+                saveActivity('hash', {
+                    algorithm: algorithm,
+                    hash: hashHex,
+                    length: input.length
+                });
+            } catch (error) {
+                alert('Error generating hash: ' + error.message);
+            }
+        }
+
+        // Hash Verification
+        function verifyHash() {
+            const generatedHash = document.getElementById('hashResultText').textContent;
+            const verifyHashInput = document.getElementById('verifyHash').value.trim();
+            
+            if (!generatedHash) {
+                alert('Please generate a hash first');
+                return;
+            }
+            
+            if (!verifyHashInput) {
+                alert('Please enter a hash to verify');
+                return;
+            }
+
+            const match = generatedHash.toLowerCase() === verifyHashInput.toLowerCase();
+            const resultDiv = document.getElementById('verifyResult');
+            
+            resultDiv.className = match ? 'alert alert-success' : 'alert alert-error';
+            resultDiv.innerHTML = match 
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> ✓ Hashes Match!'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> ✗ Hashes Do Not Match';
+            resultDiv.classList.remove('hidden');
+        }
+
+        // Password Strength Checker
+        function checkPasswordStrength() {
+            const password = document.getElementById('passwordInput').value;
+            
+            if (!password) {
+                alert('Please enter a password to check');
+                return;
+            }
+
+            let strength = 0;
+            const feedback = [];
+
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            if (password.length < 8) feedback.push('Use at least 8 characters');
+            if (!/[a-z]/.test(password)) feedback.push('Add lowercase letters');
+            if (!/[A-Z]/.test(password)) feedback.push('Add uppercase letters');
+            if (!/[0-9]/.test(password)) feedback.push('Add numbers');
+            if (!/[^a-zA-Z0-9]/.test(password)) feedback.push('Add special characters');
+
+            const levels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+            const colors = ['strength-weak', 'strength-weak', 'strength-fair', 'strength-good', 'strength-strong', 'strength-strong'];
+            const textColors = ['#ef4444', '#ef4444', '#f59e0b', '#eab308', '#22c55e', '#22c55e'];
+            
+            document.getElementById('strengthLevel').textContent = levels[strength];
+            document.getElementById('strengthLevel').style.color = textColors[strength];
+            
+            const strengthFill = document.getElementById('strengthFill');
+            strengthFill.className = 'strength-fill ' + colors[strength];
+            strengthFill.style.width = ((strength / 6) * 100) + '%';
+            
+            document.getElementById('strengthResult').classList.remove('hidden');
+            
+            if (feedback.length > 0) {
+                const suggestionsList = document.getElementById('suggestionsList');
+                suggestionsList.innerHTML = feedback.map(tip => `<li>${tip}</li>`).join('');
+                document.getElementById('strengthSuggestions').classList.remove('hidden');
+            } else {
+                document.getElementById('strengthSuggestions').classList.add('hidden');
+            }
+        }
+
+        // Password Generator
+        function generatePassword() {
+            const length = parseInt(document.getElementById('passwordLength').value);
+            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            const allChars = lowercase + uppercase + numbers + symbols;
+
+            let password = '';
+            // Ensure at least one character from each category
+            password += lowercase[Math.floor(Math.random() * lowercase.length)];
+            password += uppercase[Math.floor(Math.random() * uppercase.length)];
+            password += numbers[Math.floor(Math.random() * numbers.length)];
+            password += symbols[Math.floor(Math.random() * symbols.length)];
+
+            // Fill the rest randomly
+            for (let i = password.length; i < length; i++) {
+                password += allChars[Math.floor(Math.random() * allChars.length)];
+            }
+
+            // Shuffle the password
+                        
+            // Shuffle the password
+            password = password.split('').sort(() => Math.random() - 0.5).join('');
+            
+            document.getElementById('generatedPasswordText').textContent = password;
+            document.getElementById('generatedPasswordResult').classList.remove('hidden');
+            
+            // Save activity
+            saveActivity('password', {
+                password: password,
+                length: length
+            });
+        }(() => Math.random() - 0.5).join('');
+            
+            document.getElementById('generatedPasswordText').textContent = password;
+            document.getElementById('generatedPasswordResult').classList.remove('hidden');
+        
+
+        // Update password length value display
+        function updateLengthValue() {
+            const length = document.getElementById('passwordLength').value;
+            document.getElementById('lengthValue').textContent = length;
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        // Simple Encryption (Demo purposes only)
+        function encryptText() {
+            const text = document.getElementById('encryptText').value;
+            const key = document.getElementById('encryptKey').value;
+            
+            if (!text) {
+                alert('Please enter text to encrypt');
+                return;
+            }
+            
+            if (!key) {
+                alert('Please enter an encryption key');
+                return;
+            }
+
+            // Simple Caesar cipher + Base64 (for demo only)
+            const shift = key.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 26;
+            const encrypted = text.split('').map(char => {
+                if (char.match(/[a-z]/i)) {
+                    const code = char.charCodeAt(0);
+                    const base = code >= 65 && code <= 90 ? 65 : 97;
+                    return String.fromCharCode(((code - base + shift) % 26) + base);
+                }
+                return char;
+            }).join('');
+            
+            const result = btoa(encrypted);
+            document.getElementById('encryptResultText').textContent = result;
+            document.getElementById('encryptResult').classList.remove('hidden');
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const button = event.target.closest('.copy-btn');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        }
+
+        // URL Checker Function
+        function checkURL() {
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                alert('Please enter a URL to check');
+                return;
+            }
+
+            // Validate URL format
+            let validURL;
+            try {
+                validURL = new URL(url);
+            } catch (e) {
+                alert('Invalid URL format. Please include http:// or https://');
+                return;
+            }
+
+            // Demo analysis - In production, call external APIs
+            const analysis = analyzeURL(validURL);
+            
+            const resultDiv = document.getElementById('urlAnalysis');
+            resultDiv.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${analysis.safe ? '#22c55e' : '#ef4444'}" stroke-width="2">
+                            ${analysis.safe ? 
+                                '<polyline points="20 6 9 17 4 12"></polyline>' : 
+                                '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>'
+                            }
+                        </svg>
+                        <h4 style="color: ${analysis.safe ? '#22c55e' : '#ef4444'}; font-size: 1.2rem; margin: 0;">
+                            ${analysis.safe ? 'URL Appears Safe' : 'Potential Security Risks Detected'}
+                        </h4>
+                    </div>
+                    
+                    <div style="background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p style="margin: 5px 0;"><strong>Protocol:</strong> ${validURL.protocol}</p>
+                        <p style="margin: 5px 0;"><strong>Domain:</strong> ${validURL.hostname}</p>
+                        <p style="margin: 5px 0;"><strong>Port:</strong> ${validURL.port || 'Default'}</p>
+                        <p style="margin: 5px 0;"><strong>Path:</strong> ${validURL.pathname || '/'}</p>
+                    </div>
+
+                    <div style="background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 8px;">
+                        <h5 style="color: #c4b5fd; margin-bottom: 10px;">Security Checks:</h5>
+                        ${analysis.checks.map(check => `
+                            <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+                                <span style="color: ${check.passed ? '#22c55e' : '#ef4444'}; font-size: 1.2rem;">
+                                    ${check.passed ? '✓' : '✗'}
+                                </span>
+                                <span style="color: ${check.passed ? '#86efac' : '#fca5a5'};">${check.description}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${!analysis.safe ? `
+                        <div style="background: rgba(239, 68, 68, 0.2); padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid rgba(239, 68, 68, 0.4);">
+                            <h5 style="color: #fca5a5; margin-bottom: 10px;">⚠️ Warnings:</h5>
+                            ${analysis.warnings.map(warning => `
+                                <p style="margin: 5px 0; color: #fca5a5;">• ${warning}</p>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+
+                    <div style="background: rgba(234, 179, 8, 0.2); padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid rgba(234, 179, 8, 0.4);">
+                        <p style="color: #fde047; margin: 0;">
+                            <strong>Note:</strong> This is a basic demo checker. For production use, integrate with:
+                        </p>
+                        <ul style="margin: 10px 0 0 20px; color: #fde047;">
+                            <li>Google Safe Browsing API</li>
+                            <li>VirusTotal API</li>
+                            <li>URLScan.io</li>
+                            <li>PhishTank API</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('urlCheckResult').classList.remove('hidden');
+            
+            // Save activity
+            saveActivity('urlcheck', {
+                url: url,
+                safe: analysis.safe
+            });
+        }
+
+        // Demo URL Analysis Function
+        function analyzeURL(urlObj) {
+            const checks = [];
+            const warnings = [];
+            let safe = true;
+
+            // Check 1: HTTPS
+            const hasHTTPS = urlObj.protocol === 'https:';
+            checks.push({
+                passed: hasHTTPS,
+                description: hasHTTPS ? 'Uses secure HTTPS protocol' : 'Not using secure HTTPS protocol'
+            });
+            if (!hasHTTPS) {
+                warnings.push('URL does not use HTTPS encryption');
+                safe = false;
+            }
+
+            // Check 2: Suspicious keywords
+            const suspiciousKeywords = ['login', 'signin', 'verify', 'account', 'secure', 'banking', 'paypal', 'update'];
+            const hasSuspiciousKeywords = suspiciousKeywords.some(keyword => 
+                urlObj.hostname.toLowerCase().includes(keyword) || 
+                urlObj.pathname.toLowerCase().includes(keyword)
+            );
+            checks.push({
+                passed: !hasSuspiciousKeywords,
+                description: hasSuspiciousKeywords ? 'Contains suspicious keywords' : 'No suspicious keywords detected'
+            });
+            if (hasSuspiciousKeywords) {
+                warnings.push('URL contains keywords commonly used in phishing attempts');
+                safe = false;
+            }
+
+            // Check 3: IP address instead of domain
+            const isIPAddress = /^(\d{1,3}\.){3}\d{1,3}$/.test(urlObj.hostname);
+            checks.push({
+                passed: !isIPAddress,
+                description: isIPAddress ? 'Uses IP address instead of domain' : 'Uses proper domain name'
+            });
+            if (isIPAddress) {
+                warnings.push('Using IP address instead of domain name (common in phishing)');
+                safe = false;
+            }
+
+            // Check 4: Domain length
+            const domainTooLong = urlObj.hostname.length > 50;
+            checks.push({
+                passed: !domainTooLong,
+                description: domainTooLong ? 'Unusually long domain name' : 'Normal domain length'
+            });
+            if (domainTooLong) {
+                warnings.push('Domain name is unusually long');
+                safe = false;
+            }
+
+            // Check 5: Multiple subdomains
+            const subdomainCount = (urlObj.hostname.match(/\./g) || []).length;
+            const tooManySubdomains = subdomainCount > 3;
+            checks.push({
+                passed: !tooManySubdomains,
+                description: tooManySubdomains ? 'Multiple subdomains detected' : 'Normal subdomain structure'
+            });
+            if (tooManySubdomains) {
+                warnings.push('Excessive subdomains may indicate obfuscation');
+                safe = false;
+            }
+
+            // Check 6: Suspicious TLD
+            const suspiciousTLDs = ['.tk', '.ml', '.ga', '.cf', '.gq', '.xyz', '.top'];
+            const hasSuspiciousTLD = suspiciousTLDs.some(tld => urlObj.hostname.endsWith(tld));
+            checks.push({
+                passed: !hasSuspiciousTLD,
+                description: hasSuspiciousTLD ? 'Uses high-risk TLD' : 'Uses standard TLD'
+            });
+            if (hasSuspiciousTLD) {
+                warnings.push('Domain uses a TLD commonly associated with malicious sites');
+                safe = false;
+            }
+
+            return { safe, checks, warnings };
+        }
+
+        // WHOIS Lookup Function
+        function performWHOIS() {
+            const domain = document.getElementById('domainInput').value.trim().toLowerCase();
+            
+            if (!domain) {
+                alert('Please enter a domain name');
+                return;
+            }
+
+            // Clean domain (remove http://, https://, www., trailing slashes)
+            const cleanDomain = domain
+                .replace(/^https?:\/\//, '')
+                .replace(/^www\./, '')
+                .replace(/\/$/, '')
+                .split('/')[0];
+
+            // Validate domain format
+            const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}$/;
+            if (!domainRegex.test(cleanDomain)) {
+                alert('Invalid domain format. Example: example.com');
+                return;
+            }
+
+            // Demo WHOIS data - In production, call WHOIS API
+            const whoisData = generateDemoWHOIS(cleanDomain);
+            
+            const resultDiv = document.getElementById('whoisData');
+            resultDiv.innerHTML = `
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <h4 style="color: #a855f7; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.3); padding-bottom: 10px;">
+                        Domain: ${cleanDomain}
+                    </h4>
+                    
+                    <div style="display: grid; gap: 12px;">
+                        <div>
+                            <strong style="color: #c4b5fd;">Registrar:</strong>
+                            <span style="color: #e9d5ff; margin-left: 10px;">${whoisData.registrar}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #c4b5fd;">Registration Date:</strong>
+                            <span style="color: #e9d5ff; margin-left: 10px;">${whoisData.createdDate}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #c4b5fd;">Expiration Date:</strong>
+                            <span style="color: #e9d5ff; margin-left: 10px;">${whoisData.expiryDate}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #c4b5fd;">Updated Date:</strong>
+                            <span style="color: #e9d5ff; margin-left: 10px;">${whoisData.updatedDate}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #c4b5fd;">Status:</strong>
+                            <span style="color: #e9d5ff; margin-left: 10px;">${whoisData.status}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #c4b5fd;">Name Servers:</strong>
+                            <div style="margin-left: 10px; margin-top: 5px;">
+                                ${whoisData.nameServers.map(ns => `
+                                    <div style="color: #e9d5ff; padding: 3px 0;">• ${ns}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(234, 179, 8, 0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(234, 179, 8, 0.4);">
+                    <h5 style="color: #fde047; margin-bottom: 10px;">📝 Note: Demo Data</h5>
+                    <p style="color: #fde047; margin: 0; line-height: 1.6;">
+                        This is simulated WHOIS data. For real lookups, integrate with:
+                    </p>
+                    <ul style="margin: 10px 0 0 20px; color: #fde047;">
+                        <li><strong>WHOIS XML API</strong> - whoisxmlapi.com</li>
+                        <li><strong>IPGeolocation.io</strong> - ipgeolocation.io/whois-api</li>
+                        <li><strong>WHOIS API by DomainTools</strong> - domaintools.com</li>
+                        <li><strong>RapidAPI WHOIS</strong> - rapidapi.com/hub</li>
+                    </ul>
+                    <p style="color: #fde047; margin: 10px 0 0 0; font-size: 0.9rem;">
+                        <strong>Implementation:</strong> These APIs typically require an API key and have rate limits.
+                    </p>
+                </div>
+            `;
+            
+            document.getElementById('whoisResult').classList.remove('hidden');
+            
+            // Save activity
+            saveActivity('whois', {
+                domain: cleanDomain,
+                registrar: whoisData.registrar
+            });
+        }
+
+        // Generate Demo WHOIS Data
+        function generateDemoWHOIS(domain) {
+            const registrars = [
+                'GoDaddy.com, LLC',
+                'Namecheap, Inc.',
+                'Google LLC',
+                'Cloudflare, Inc.',
+                'Network Solutions, LLC'
+            ];
+
+            const statuses = [
+                'clientTransferProhibited',
+                'clientUpdateProhibited',
+                'serverDeleteProhibited',
+                'serverTransferProhibited'
+            ];
+
+            const now = new Date();
+            const createdDate = new Date(now.getFullYear() - Math.floor(Math.random() * 10), 
+                Math.floor(Math.random() * 12), Math.floor(Math.random() * 28));
+            const expiryDate = new Date(now.getFullYear() + 1, 
+                createdDate.getMonth(), createdDate.getDate());
+            const updatedDate = new Date(now.getFullYear(), 
+                Math.floor(Math.random() * 12), Math.floor(Math.random() * 28));
+
+            return {
+                registrar: registrars[Math.floor(Math.random() * registrars.length)],
+                createdDate: createdDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', month: 'long', day: 'numeric' 
+                }),
+                expiryDate: expiryDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', month: 'long', day: 'numeric' 
+                }),
+                updatedDate: updatedDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', month: 'long', day: 'numeric' 
+                }),
+                status: statuses[Math.floor(Math.random() * statuses.length)],
+                nameServers: [
+                    `ns1.${domain}`,
+                    `ns2.${domain}`,
+                    `ns3.${domain}`
+                ]
+            };
+        }
+    </script>
+</body>
+</html>
